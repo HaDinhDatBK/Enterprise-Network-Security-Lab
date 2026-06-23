@@ -41,7 +41,7 @@ This project simulates enterprise network infrastructure using industry-standard
 | R3 | e0/0 | FGT1 | port1 |
 | R3 | e0/0 | FGT2 | port1 |
 | R3 | e0/2 | R4 | e0/0 |
-| R3 | e0/3 | FGT | port1 |
+| R3 | e0/3 | FGT5 | port1 |
 | FGT1 | port2 | SW-Core | e0/0 (trunk) |
 | FGT2 | port2 | SW-Core| e0/1 (trunk) |
 | FGT1 | port4 | FGT2 | port4 (HA) |
@@ -55,7 +55,23 @@ This project simulates enterprise network infrastructure using industry-standard
 ### WAN Links 
 | Link | Network | R3 IP | FGT IP |
 | :--- | :--- | :--- | :--- |
-| WAN1 (FGT1) | e0/0 | FGT1 | port1 |
-| R3 | e0/0 | FGT2 | port1 |
-### IP Addressing Plan
-
+| WAN1 (FGT1) | 10.0.0.0/30 | 10.0.0.1 | 10.0.0.2 |
+| WAN2 (FGT2) | 10.0.0.4/30 | 10.0.0.5 | 10.0.0.6 |
+### Inter-Site Links
+| Link | Network | R3 IP | FGT IP |
+| :--- | :--- | :--- | :--- |
+| To Site A (R4) | 10.1.0.0/30 | 10.1.0.1 | 10.1.0.2 |
+| To Site B (FGT5) | 10.2.0.0/24 | 10.2.0.1 | 10.2.0.2 |
+### VLANs — Headquarters
+### VLANs — Headquarters
+| VLAN | Name | Network | Gateway | DHCP Pool |
+| :---: | :--- | :--- | :--- | :--- |
+| 10 | Users | 192.168.10.0/24 | 192.168.10.1 | .10 – .254 |
+| 20 | Servers | 192.168.20.0/24 | 192.168.20.1 | .100 – .200 |
+| 30 | Guest | 192.168.30.0/24 | 192.168.30.1 | .10 – .200 |
+| 50 | DMZ | 192.168.50.0/24 | 192.168.50.1 | .100 – .200 |
+### Remote Sites LANs
+| Site | Network | Gateway |
+| :--- | :--- | :--- |
+| Site A (R4) | 172.16.10.0/24 | 172.16.10.1 |
+| Site B (R5) | 172.16.20.0/24 | 172.16.20.1 |
