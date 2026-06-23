@@ -167,7 +167,7 @@ Login: vpnuser / VPNuser123!
 Portal: SSL-VPN Portal loaded successfully
 ```
 **Result:** ✅ PASS — SSL VPN web portal accessible 
-**Note:** Direct browser access blocked due to TLS/DH compatibility issue with FortiGate v7.0.9 KVM. SSH tunnel workaround used.
+**Note:** Direct browser access blocked due to TLS/DH compatibility issue with FortiGate v7.0.12 KVM. SSH tunnel workaround used.
 ## Phase 6 — IPS Tests
 ### Test 14 — Port Scan Detection
 ```text
