@@ -60,7 +60,6 @@ This project simulates enterprise network infrastructure using industry-standard
 | To Site A (R4) | 10.1.0.0/30 | 10.1.0.1 | 10.1.0.2 |
 | To Site B (FGT5) | 10.2.0.0/24 | 10.2.0.1 | 10.2.0.2 |
 ### VLANs — Headquarters
-### VLANs — Headquarters
 | VLAN | Name | Network | Gateway | DHCP Pool |
 | :---: | :--- | :--- | :--- | :--- |
 | 10 | Users | 192.168.10.0/24 | 192.168.10.1 | .10 – .254 |
