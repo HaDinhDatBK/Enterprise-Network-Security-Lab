@@ -126,8 +126,8 @@ VPCS> ping 172.16.20.10
 84 bytes from 172.16.20.10 icmp_seq=4 ttl=62 time=2.598 ms
 84 bytes from 172.16.20.10 icmp_seq=5 ttl=62 time=2.567 ms
 ```
-### Text 11 — OSPF via VPN
-```test
+### Test 11 — OSPF via VPN
+```text
 FGT1-Master # get router info ospf neighbor
 OSPF process 0, VRF 0:
 Neighbor ID     Pri   State           Dead Time   Address         Interface
@@ -140,9 +140,31 @@ O       10.4.0.2/32 [110/100] via VNP Site B tunnel 10.2.0.2, 01:17:01
 O       172.16.10.0/24 [110/110] via VPN to Site A tunnel 10.1.0.2, 01:17:01
 O       172.16.20.0/24 [110/101] via VNP Site B tunnel 10.2.0.2, 01:17:01
 ```
-
-### Test 15 — SSL VPN Portal Access
+## Phase 4 — HA Cluster Tests
+### Test 12 — FortiGate HA Sync
+```test
+FGT1-Master # get system ha status
+HBDEV stats:
+    FGVMEVWQP5YVNT46(updated 1 seconds ago):
+        port4: physical/10000full, up, rx-bytes/packets/dropped/errors=1150971/3904/0/0, tx=12296667/30346/0/0
+    FGVMEV3XJRBG1RD2(updated 1 seconds ago):
+        port4: physical/10000full, up, rx-bytes/packets/dropped/errors=1178834/3095/0/0, tx=872114/2969/0/0
+Primary     : FGT1-Master     , FGVMEVWQP5YVNT46, HA cluster index = 0
+Secondary   : FGT2-Backup     , FGVMEV3XJRBG1RD2, HA cluster index = 1
+number of vcluster: 1
+vcluster 1: work 169.254.0.1
+Primary: FGVMEVWQP5YVNT46, HA operating index = 0
+Secondary: FGVMEV3XJRBG1RD2, HA operating index = 1
+```
+<img width="1613" height="387" alt="image" src="https://github.com/user-attachments/assets/e94b4c0a-d32d-40ba-831c-e78f04a61ff3" />
+## Phase 5 — SSL VPN Tests
+### Test 13 — SSL VPN Portal Access
+```text
 SSH Tunnel: ssh -L 8443:192.168.56.200:10443 root@192.168.56.110
 Browser: https://localhost:8443
 Login: vpnuser / VPNuser123!
 Portal: SSL-VPN Portal loaded successfully
+```
+**Result:** ✅ PASS — SSL VPN web portal accessible /n
+**Note:** Direct browser access blocked due to TLS/DH compatibility issue with FortiGate v7.0.9 KVM. SSH tunnel workaround used.
+
