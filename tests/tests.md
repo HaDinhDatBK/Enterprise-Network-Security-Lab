@@ -48,15 +48,36 @@ LPORT       : 20000
 RHOST:PORT  : 127.0.0.1:30000
 MTU         : 1500
 ```
-### Test 04 — VLan 10 Ping to Gateway
+### Test 04 — VLan 10 Ping to Gateway, Vlan 10, 30 to Internet
 ```test
+Vlan 10 Users
 VPCS> ping 192.168.10.1
 84 bytes from 192.168.10.1 icmp_seq=1 ttl=255 time=0.831 ms
 84 bytes from 192.168.10.1 icmp_seq=2 ttl=255 time=1.321 ms
 84 bytes from 192.168.10.1 icmp_seq=3 ttl=255 time=1.085 ms
 84 bytes from 192.168.10.1 icmp_seq=4 ttl=255 time=12.677 ms
 84 bytes from 192.168.10.1 icmp_seq=5 ttl=255 time=1.055 ms
+VPCS> ping 8.8.8.8
+84 bytes from 8.8.8.8 icmp_seq=1 ttl=127 time=49.686 ms
+84 bytes from 8.8.8.8 icmp_seq=2 ttl=127 time=49.835 ms
+84 bytes from 8.8.8.8 icmp_seq=3 ttl=127 time=46.522 ms
+84 bytes from 8.8.8.8 icmp_seq=4 ttl=127 time=47.422 ms
+84 bytes from 8.8.8.8 icmp_seq=5 ttl=127 time=47.497 ms
+
+VLan 30 Guest
+VPCS> ip dhcp
+DDORA IP 192.168.30.10/24 GW 192.168.30.1
+VPCS> ping 8.8.8.8
+84 bytes from 8.8.8.8 icmp_seq=1 ttl=127 time=43.305 ms
+84 bytes from 8.8.8.8 icmp_seq=2 ttl=127 time=45.800 ms
+84 bytes from 8.8.8.8 icmp_seq=3 ttl=127 time=46.270 ms
+84 bytes from 8.8.8.8 icmp_seq=4 ttl=127 time=44.747 ms
+84 bytes from 8.8.8.8 icmp_seq=5 ttl=127 time=44.481 ms
+
+
+
 ```
+
 ## Phase 2 — VLAN Isolation Tests
 ### Test 05 — Vlan 10 ping to Vlan 30 (VLAN Isolation)
 ```text
@@ -161,7 +182,7 @@ Secondary: FGVMEV3XJRBG1RD2, HA operating index = 1
 ## Phase 5 — SSL VPN Tests
 ### Test 13 — SSL VPN Portal Access
 ```text
-SSH Tunnel: ssh -L 8443:192.168.56.200:10443 root@192.168.56.110
+SSH Tunnel: ssh -L 8443:192.168.80.3:10443 root@192.168.80.1
 Browser: https://localhost:8443
 Login: vpnuser / VPNuser123!
 Portal: SSL-VPN Portal loaded successfully
@@ -171,7 +192,7 @@ Portal: SSL-VPN Portal loaded successfully
 ## Phase 6 — IPS Tests
 ### Test 14 — Port Scan Detection
 ```text
-Windows CMD> nmap -sT -Pn --max-rtt-timeout 100ms -p 22,23,80,443 192.168.10.100
+Windows CMD> nmap -sT -Pn --max-rtt-timeout 100ms -p 22,23,80,443 192.168.10.10
 PORT    STATE    SERVICE
 22/tcp  filtered ssh
 23/tcp  filtered telnet
@@ -180,12 +201,19 @@ PORT    STATE    SERVICE
 ```
 **Expected:** Ports filtered by IPS-Lab profile
 **Result:** ✅ PASS — IPS blocking scan attempts
-## Phase 8 — SNMP Tests
-### Test 17 — SNMP Port Verification
+## Phase 7 — SNMP Tests
+### Test 15 — SNMP Port Verification
 ```text
-Windows CMD> nmap -sU -p 161 192.168.56.200
-PORT    STATE         SERVICE
-161/udp open|filtered snmp
-MAC Address: 00:09:0F:09:01:02 (Fortinet)
+----------------------- New Test -----------------------
+Paessler SNMP Tester - 24.4.102.648 Computername: LAPTOP-82RAK9RD Interface: 192.168.80.1
+23/06/2026 9:52:02 CH (3 ms) : Device: 192.168.80.3
+23/06/2026 9:52:02 CH (8 ms) : SNMP v2c
+23/06/2026 9:52:02 CH (9 ms) : Custom OID .1.3.6.1.2.1.1.1.0
+23/06/2026 9:52:02 CH (25 ms) : SNMP Datatype: ASN_OCTET_STR
+23/06/2026 9:52:02 CH (27 ms) : -------
+23/06/2026 9:52:02 CH (28 ms) : Value: FGT1-Master Enterprise Lab
+23/06/2026 9:52:02 CH (30 ms) : Done
 ```
-**Result:** ✅ PASS — SNMP port 161/UDP open on FortiGate
+<img width="1100" height="990" alt="image" src="https://github.com/user-attachments/assets/6b7329b4-9dc2-49c5-b41f-d22f88178761" />
+
+**Result:** ✅ PASS — SNMP port 161/UDP open on FortiGate (Use Paessler SNMP Tester to test)
