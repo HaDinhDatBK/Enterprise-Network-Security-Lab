@@ -2,8 +2,7 @@
 <img width="1452" height="866" alt="Ảnh chụp màn hình 2026-06-23 094517" src="https://github.com/user-attachments/assets/971d3887-3b9f-4b29-9b56-a98c11a6b860" />
 
 # HA
-<img width="988" height="707" alt="image" src="https://github.com/user-attachments/assets/458789f2-5f96-49c3-80e4-234aec3da7c6" />
-
+<img width="968" height="587" alt="image" src="https://github.com/user-attachments/assets/b91422ee-8c1c-41e4-911b-d03409e9c4c2" />
 
 # Policys 
 <img width="1611" height="727" alt="image" src="https://github.com/user-attachments/assets/0e0f3a7f-6303-4632-b7e5-e8ed90916e78" />
