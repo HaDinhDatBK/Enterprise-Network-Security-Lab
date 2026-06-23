@@ -6,7 +6,6 @@
 <p align="center">
   <a href="#features">Features</a> · 
   <a href="#architecture">Architecture</a> · 
-  <a href="#technologies">Technologies</a> · 
   <a href="#lab-setup">Lab Setup</a> · 
   <a href="#configuration">Configuration</a> · 
   <a href="#testing">Testing</a> · 
@@ -52,6 +51,11 @@ This project simulates enterprise network infrastructure using industry-standard
 | SW-Core | e1/2 | Server | eth0 (VLAN20) |
 | SW-Core | e2/1 | PC9 | eth0 (VLAN30) |
 | SW-Core | e2/3 | PC8 | eth0 (VLAN50) |
-
+##  IP Addressing Plan
+### WAN Links 
+| Link | Network | R3 IP | FGT IP |
+| :--- | :--- | :--- | :--- |
+| WAN1 (FGT1) | e0/0 | FGT1 | port1 |
+| R3 | e0/0 | FGT2 | port1 |
 ### IP Addressing Plan
 
