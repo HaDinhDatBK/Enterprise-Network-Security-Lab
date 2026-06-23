@@ -99,6 +99,7 @@ FGT1-Master # get vpn ipsec tunnel summary
 'VPN to Site A' 10.1.0.2:0  selectors(total,up): 1/1  rx(pkt,err): 416/0  tx(pkt,err): 395/3
 ```
 <img width="1612" height="257" alt="image" src="https://github.com/user-attachments/assets/72394ab8-48ea-4dfd-9f57-b6fa69acdc86" />
+
 ### Test 09 — Vlan 10 to Site A via VPN
 **Expected:**  Users (Vlan 10) can reach site A and Guest (Vlan 30) is BLOCK 
 ```text
