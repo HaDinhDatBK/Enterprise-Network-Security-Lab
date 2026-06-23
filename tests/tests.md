@@ -68,7 +68,7 @@ VPCS> ping 192.168.30.10
 192.168.30.10 icmp_seq=5 timeout
 ```
 **Expected:** BLOCKED by firewall policy
-**Result:** ✅ PASS — Inter-VLAN traffic blocked (Users ↛ Guest)
+    **Result:** ✅ PASS — Inter-VLAN traffic blocked (Users ↛ Guest)
 ### Test 06 — Vlan 10 to Vlan 50 DMZ (Allowed)
 ```text
 VPCS> ping 192.168.50.100
@@ -79,7 +79,7 @@ VPCS> ping 192.168.50.100
 84 bytes from 192.168.50.100 icmp_seq=5 ttl=63 time=10.119 ms
 ```
 **Expected:** ALLOWED (HTTP/HTTPS/PING only)
-**Result:** ✅ PASS — Users can reach DMZ via policy 
+    **Result:** ✅ PASS — Users can reach DMZ via policy 
 ### Test 07 — DMZ to Vlan 10 (DMZ to LAN Block)
 ```text
 VPCS> ping 192.168.10.10
@@ -90,7 +90,7 @@ VPCS> ping 192.168.10.10
 192.168.10.10 icmp_seq=5 timeout
 ```
 **Expected:** BLOCKED by DMZ-block-LAN policy
-**Result:** ✅ PASS — DMZ cannot access LAN 
+    **Result:** ✅ PASS — DMZ cannot access LAN 
 ## Phase 3 — IPsec VPN Tests
 ### Test 08 —  IPsec Tunnel Site A & B
 ```test
@@ -116,7 +116,6 @@ VPCS> ping 172.16.10.2
 172.16.10.2 icmp_seq=4 timeout
 172.16.10.2 icmp_seq=5 timeout
 ```
-**
 ### Test 15 — SSL VPN Portal Access
 SSH Tunnel: ssh -L 8443:192.168.56.200:10443 root@192.168.56.110
 Browser: https://localhost:8443
