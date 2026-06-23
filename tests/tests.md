@@ -117,6 +117,30 @@ VPCS> ping 172.16.10.2
 172.16.10.2 icmp_seq=4 timeout
 172.16.10.2 icmp_seq=5 timeout
 ```
+### Test 10 — Vlan 10 to Site B via VPN
+```text
+VPCS> ping 172.16.20.10
+84 bytes from 172.16.20.10 icmp_seq=1 ttl=62 time=15.042 ms
+84 bytes from 172.16.20.10 icmp_seq=2 ttl=62 time=2.228 ms
+84 bytes from 172.16.20.10 icmp_seq=3 ttl=62 time=2.423 ms
+84 bytes from 172.16.20.10 icmp_seq=4 ttl=62 time=2.598 ms
+84 bytes from 172.16.20.10 icmp_seq=5 ttl=62 time=2.567 ms
+```
+### Text 11 — OSPF via VPN
+```test
+FGT1-Master # get router info ospf neighbor
+OSPF process 0, VRF 0:
+Neighbor ID     Pri   State           Dead Time   Address         Interface
+4.4.4.4           1   Full/ -         00:00:37    10.3.0.2        VPN to Site A(tun-id:10.1.0.2)
+5.5.5.5           1   Full/ -         00:00:31    10.4.0.2        VNP Site B(tun-id:10.2.0.2)
+
+FGT1-Master # get router info routing-table ospf
+Routing table for VRF=0
+O       10.4.0.2/32 [110/100] via VNP Site B tunnel 10.2.0.2, 01:17:01
+O       172.16.10.0/24 [110/110] via VPN to Site A tunnel 10.1.0.2, 01:17:01
+O       172.16.20.0/24 [110/101] via VNP Site B tunnel 10.2.0.2, 01:17:01
+```
+
 ### Test 15 — SSL VPN Portal Access
 SSH Tunnel: ssh -L 8443:192.168.56.200:10443 root@192.168.56.110
 Browser: https://localhost:8443
