@@ -6,9 +6,6 @@
 <p align="center">
   <a href="#features">Features</a> · 
   <a href="#architecture">Architecture</a> · 
-  <a href="#lab-setup">Lab Setup</a> · 
-  <a href="#configuration">Configuration</a> · 
-  <a href="#testing">Testing</a> · 
   <a href="#results">Results</a>
 </p>
 
@@ -75,3 +72,30 @@ This project simulates enterprise network infrastructure using industry-standard
 | :--- | :--- | :--- |
 | Site A (R4) | 172.16.10.0/24 | 172.16.10.1 |
 | Site B (R5) | 172.16.20.0/24 | 172.16.20.1 |
+### VPN Pools
+| Type | Range |
+| :--- | :--- |
+| SSL VPN Pool | 10.10.10.10 – 10.10.10.100 |
+| Management | 192.168.56.200/24 |
+##  Results
+### Test Summary
+| Test | Description | Expected | Result |
+| :---: | :--- | :--- | :---: |
+| 01 | DHCP VLAN10 VPC7 | 192.168.10.10 | ✅ |
+| 02 | DHCP VLAN10 VPC | 192.168.10.11 | ✅ |
+| 03 | DHCP VLAN30 VPC9 | 192.168.30.10 | ✅ |
+| 04 | DHCP VLAN50 VPC8 | 192.168.50.100 | ✅ |
+| 05 | VPC7 → Gateway ping | OK | ✅ |
+| 06 | VPC7 → VPC9 VLAN isolation | BLOCKED | ✅ |
+| 07 | VPC7 → VPC8 DMZ access | ALLOWED | ✅ |
+| 08 | VPC8 → VPC7 DMZ→LAN block | BLOCKED | ✅ |
+| 09 | FortiGate HA sync | In-Sync | ✅ |
+| 10 | R3 → FGT1 ping | OK | ✅ |
+| 11 | IPsec VPN Site A | Tunnel active | ✅ |
+| 12 | IPsec VPN Site B | Tunnel active | ✅ |
+| 13 | OSPF over IPsec VPN |  Active | ✅ |
+| 14 | VPC7 → Site A (172.16.10.1) | OK via VPN | ✅ |
+| 15 | VPC7 → Site B (172.16.20.1) | OK via VPN | ✅ |
+| 16| SSL VPN Web Mode | Portal accessible | ✅ |
+| 17 | IPS Port Scan detection | Ports filtered | ✅ |
+| 18 | SNMP port 161 | Open | ✅ |
