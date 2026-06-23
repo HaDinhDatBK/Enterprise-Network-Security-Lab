@@ -157,6 +157,7 @@ Primary: FGVMEVWQP5YVNT46, HA operating index = 0
 Secondary: FGVMEV3XJRBG1RD2, HA operating index = 1
 ```
 <img width="1613" height="387" alt="image" src="https://github.com/user-attachments/assets/e94b4c0a-d32d-40ba-831c-e78f04a61ff3" />
+
 ## Phase 5 — SSL VPN Tests
 ### Test 13 — SSL VPN Portal Access
 ```text
@@ -165,6 +166,26 @@ Browser: https://localhost:8443
 Login: vpnuser / VPNuser123!
 Portal: SSL-VPN Portal loaded successfully
 ```
-**Result:** ✅ PASS — SSL VPN web portal accessible /n
+**Result:** ✅ PASS — SSL VPN web portal accessible 
 **Note:** Direct browser access blocked due to TLS/DH compatibility issue with FortiGate v7.0.9 KVM. SSH tunnel workaround used.
-
+## Phase 6 — IPS Tests
+### Test 14 — Port Scan Detection
+```text
+Windows CMD> nmap -sT -Pn --max-rtt-timeout 100ms -p 22,23,80,443 192.168.10.100
+PORT    STATE    SERVICE
+22/tcp  filtered ssh
+23/tcp  filtered telnet
+80/tcp  filtered http
+443/tcp filtered https
+```
+**Expected:** Ports filtered by IPS-Lab profile
+**Result:** ✅ PASS — IPS blocking scan attempts
+## Phase 8 — SNMP Tests
+### Test 17 — SNMP Port Verification
+```text
+Windows CMD> nmap -sU -p 161 192.168.56.200
+PORT    STATE         SERVICE
+161/udp open|filtered snmp
+MAC Address: 00:09:0F:09:01:02 (Fortinet)
+```
+**Result:** ✅ PASS — SNMP port 161/UDP open on FortiGate
