@@ -100,7 +100,10 @@ This project simulates enterprise network infrastructure using industry-standard
 | 18 | SNMP port 161 | Open | ✅ |
 
 ## References
-FortiGate Administration Guide v7.0
-EVE-NG Documentation
-Cisco IOS Configuration Guide
+FortiGate Administration Guide v7.0  
+
+EVE-NG Documentation  
+
+Cisco IOS Configuration Guide  
+
 https://github.com/Ayoub-lah/Enterprise-Network-Security-Lab.git
