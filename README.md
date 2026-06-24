@@ -106,4 +106,3 @@ EVE-NG Documentation
 
 Cisco IOS Configuration Guide  
 
-https://github.com/Ayoub-lah/Enterprise-Network-Security-Lab.git
