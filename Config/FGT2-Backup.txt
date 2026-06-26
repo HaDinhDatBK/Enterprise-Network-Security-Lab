@@ -1,1 +1,30 @@
+# ============================================
+# FGT2-Backup — FortiGate Backup Firewall
+# Enterprise Network Security Lab
+# Firmware: v7.0.9 build0444
+# ============================================
+# NOTE: FGT2 configuration is automatically
+# synchronized from FGT1-Master via HA.
+# Only base configuration shown below.
+# ============================================
 
+# ============================================
+# SYSTEM GLOBAL
+# ============================================
+config system global
+    set hostname "FGT2-Backup"
+    set timezone 28
+end
+
+# ============================================
+# HIGH AVAILABILITY
+# ============================================
+config system ha
+    set group-name "FGT-HA"
+    set mode a-p
+    set password "ha-secret-password"
+    set hbdev "port4" 0
+    set session-pickup enable
+    set override disable
+    set priority 100
+end
