@@ -28,3 +28,7 @@ config system ha
     set override disable
     set priority 100
 end
+
+
+# All other configuration (VLANs, VPN, Policies,
+# IPS, SSL VPN, SNMP) is synced from FGT1-Master.
