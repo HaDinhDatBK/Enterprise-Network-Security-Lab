@@ -116,6 +116,18 @@ edit "Vlan 10"
     next 
 end      
 
+# ============================================
+# HIGH AVAILABILITY
+# ============================================
+config system ha
+    set group-name "FGT-HA"
+    set mode a-p
+    set password "ha-secret-password"
+    set hbdev "port4" 0 
+    set session-pickup enable
+    set override disable
+    set priority 200
+end
 
 # ============================================
 # STATIC ROUTES
@@ -136,8 +148,6 @@ config router static
         set device "port3"
     next
 end
-
-
 
 # ============================================
 # OSPF ROUTER
@@ -297,3 +307,274 @@ config vpn ipsec phase2-interface
         set auto-negotiate enable
     next
 end
+
+# ============================================
+# SSL VPN
+# ============================================
+config vpn ssl settings
+    set servercert "Fortinet_Factory"
+    set tunnel-ip-pools "SSLVPN_TUNNEL_ADDR1"
+    set tunnel-ipv6-pools "SSLVPN_TUNNEL_IPv6_ADDR1"
+    set source-interface "port3"
+    set source-address "all"
+    set source-address6 "all"
+    set default-portal "full-access"
+    set port 10443
+    config authentication-rule
+        edit 1
+            set groups "SSLVPN-Group"
+            set portal "full-access"
+        next
+    end
+end
+
+config vpn ssl web portal
+    edit "full-access"
+        set tunnel-mode enable
+        set ipv6-tunnel-mode enable
+        set web-mode enable
+        set ip-pools "SSLVPN_TUNNEL_ADDR1"
+        set split-tunneling disable
+        set ipv6-pools "SSLVPN_TUNNEL_IPv6_ADDR1"
+        config bookmark-group
+            edit "gui-bookmarks"
+            next
+        end
+    next
+end
+
+# ============================================
+# FIREWALL ADDRESS — SSL VPN POOL
+# ============================================
+config firewall address
+    edit "SSLVPN_TUNNEL_ADDR1"
+        set uuid 97c03dec-6c91-51f1-49bd-1a82f5afebe8
+        set type iprange
+        set start-ip 10.10.10.10
+        set end-ip 10.10.10.100
+        set comment "SSL VPN tunnel address pool"
+    next 
+end
+
+# ============================================
+# USER — SSL VPN
+# ============================================
+config user local
+    edit "vpnuser"
+        set type password
+        set passwd-time 2026-06-21 21:54:40
+        set passwd "VPNuser123!"
+    next
+end
+
+config user group
+    edit "SSLVPN-Group"
+        set member "vpnuser"
+    next
+end
+
+# ============================================
+# IPS SENSOR
+# ============================================
+config ips sensor 
+    edit "IPS-Lab"
+        set comment "IPS profile for enterprise lab"
+        set block-malicious-url enable
+        set scan-botnet-connections block
+        config entries
+            edit 1
+                set rule all
+                set action block
+                set log enable
+                set status enable
+                set log-packet enable
+                set action block
+            next
+        end
+
+# ============================================
+# WEB FILTER PROFILE
+# ============================================
+config webfilter profile
+    edit "web filter"
+        set comment "Write a comment..."
+        set feature-set flow
+        config web
+            set urlfilter-table 1
+        end
+    next
+end
+
+config webfilter urlfilter
+    edit 1
+        set name "Auto-webfilter-urlfilter_k8nig0b4n"
+        config entries
+            edit 1
+                set url "*24h.com*"
+                set type wildcard
+                set action block
+            next
+        end
+    next
+end
+
+# ============================================
+# FIREWALL POLICIES
+# ============================================
+config firewall policy
+    edit 1
+        set name "LAN-to-SiteA"
+        set uuid ca0a3d58-6cc7-51f1-2bd8-f7e55a60ef5f
+        set srcintf "Vlan 10"
+        set dstintf "VPN to Site A"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic-start enable
+    next
+    edit 2
+        set name "SiteA-to-LAN"
+        set uuid 1084b90c-6cc8-51f1-d4f4-88105e6d0faa
+        set srcintf "VPN to Site A"
+        set dstintf "Vlan 10"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set logtraffic-start enable
+    next
+    edit 3
+        set name "Site B to LAN"
+        set uuid 16d57e9a-6d1d-51f1-85b8-c36d50183b61
+        set srcintf "VNP Site B"
+        set dstintf "Vlan 10"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+    next
+    edit 4
+        set name "LAN to Site B"
+        set uuid 4b5fa80c-6d1d-51f1-14b5-e2a4fb53d065
+        set srcintf "Vlan 10"
+        set dstintf "VNP Site B"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+    next
+    edit 5
+        set name "SiteA -> DMZ"
+        set uuid 4b367962-6d2e-51f1-09f2-4b6c243d799d
+        set srcintf "VPN to Site A"
+        set dstintf "Vlan 50"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+    next
+    edit 6
+        set name "Users to DMZ"
+        set uuid dde5730c-6d52-51f1-13eb-5a0508241b03
+        set srcintf "Vlan 10"
+        set dstintf "Vlan 50"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL_ICMP" "HTTP" "HTTPS"
+        set utm-status enable
+        set ssl-ssh-profile "certificate-inspection"
+        set ips-sensor "IPS-Lab"
+    next
+    edit 7
+        set name "Users to Internet"
+        set uuid fb40f3ea-6d52-51f1-fa43-3b964f89c00a
+        set srcintf "Vlan 10"
+        set dstintf "port3"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set ssl-ssh-profile "custom-deep-inspection"
+        set webfilter-profile "web filter"
+        set ips-sensor "IPS-Lab"
+        set nat enable
+    next
+    edit 8
+        set name "Guest to Internet"
+        set uuid 1d38e2c2-6d54-51f1-7863-8774f6167dc3
+        set srcintf "Vlan 30"
+        set dstintf "port3"
+        set action accept
+        set srcaddr "all"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set ssl-ssh-profile "custom-deep-inspection"
+        set webfilter-profile "web filter"
+        set nat enable
+    next
+    edit 9
+        set name "SSL-VPN-to-LAN"
+        set uuid a6f401c0-6d88-51f1-797d-73b76e352081
+        set srcintf "ssl.root"
+        set dstintf "Vlan 10"
+        set action accept
+        set srcaddr "SSLVPN_TUNNEL_ADDR1"
+        set dstaddr "all"
+        set schedule "always"
+        set service "ALL"
+        set utm-status enable
+        set ssl-ssh-profile "certificate-inspection"
+        set ips-sensor "IPS-Lab"
+        set groups "SSLVPN-Group"
+    next
+end
+
+# ============================================
+# SNMP
+# ============================================
+config system snmp sysinfo
+    set status enable
+    set description "FGT1-Master Enterprise Lab"
+    set contact-info "admin@lab.local"
+    set location "EVE-NG Lab"
+end
+
+config system snmp community
+    edit 1
+        set name "LabSNMP"
+        config hosts
+            edit 1
+                set ip 192.168.80.0 255.255.255.0
+            next
+        end
+    next
+end
+
+# ============================================
+# LOG SETTINGS
+# ============================================
+config log memory filter
+    set severity information
+    set forward-traffic enable
+    set anomaly enable
+end
+
+config log memory setting
+    set status enable
+end
+
+# ============================================
+# END
+# ============================================
