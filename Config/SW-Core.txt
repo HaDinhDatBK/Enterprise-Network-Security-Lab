@@ -1,1 +1,92 @@
+! ============================================
+! SW  Switch Configuration
+! Enterprise Network Security Lab
+! ============================================
+
+hostname SW
+
+! ============================================
+! VLAN DATABASE
+! ============================================
+sh vlan 
+VLAN Name                             Status    Ports
+---- -------------------------------- --------- -------------------------------
+1    default                          active
+10   Users                            active    Et0/2, Et0/3, Et1/0
+20   Servers                          active    Et1/1, Et1/2
+30   Guest                            active    Et1/3, Et2/0, Et2/1
+50   DMZ                              active    Et2/2, Et2/3
+1002 fddi-default                     act/unsup
+1003 token-ring-default               act/unsup
+1004 fddinet-default                  act/unsup
+1005 trnet-default                    act/unsup
+
+! ============================================
+! TRUNK PORTS — TO FORTIGATE
+! ============================================
+interface Ethernet0/0
+ description Trunk -> FGT1 port2
+ switchport trunk allowed vlan 10,20,30,50
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+!
+interface Ethernet0/1
+ description Trunk -> FGT2 port2
+ switchport trunk allowed vlan 10,20,30,50
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+
+! ============================================
+! ACCESS PORTS — REMOTE SITE ROUTERS
+! ============================================
+interface Ethernet0/2
+ description Access VLAN 10 (Users)
+ switchport access vlan 10
+ switchport mode access
+!
+interface Ethernet0/3
+ description Access VLAN 10 (Users)
+ switchport access vlan 10
+ switchport mode access
+!
+interface Ethernet1/0
+ description Access VLAN 10 (Users)
+ switchport access vlan 10
+ switchport mode access
+!
+interface Ethernet1/1
+ description Access VLAN 20 (Servers)
+ switchport access vlan 20
+ switchport mode access
+!
+interface Ethernet1/2
+ description Access VLAN 20 (Servers)
+ switchport access vlan 20
+ switchport mode access
+!
+interface Ethernet1/3
+ description Access VLAN 30 (Guest)
+ switchport access vlan 30
+ switchport mode access
+!
+interface Ethernet2/0
+ description Access VLAN 30 (Guest)
+ switchport access vlan 30
+ switchport mode access
+!
+interface Ethernet2/1
+ description Access VLAN 30 (Guest)
+ switchport access vlan 30
+ switchport mode access
+!
+interface Ethernet2/2
+ description Access VLAN 50 (DMZ)
+ switchport access vlan 50
+ switchport mode access
+!
+interface Ethernet2/3
+ description Access VLAN 50 (DMZ)
+ switchport access vlan 50
+ switchport mode access
+!
 
