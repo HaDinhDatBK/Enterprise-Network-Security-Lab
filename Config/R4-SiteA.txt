@@ -1,1 +1,67 @@
+! ============================================
+! R4-SiteA — Remote Site A Router
+! ============================================
+
+hostname R4
+
+! ============================================
+! INTERFACES
+! ============================================
+interface Tunnel0
+ ip address 10.3.0.2 255.255.255.252
+ ip ospf network point-to-point
+ tunnel source Ethernet0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 10.0.0.2
+ tunnel protection ipsec profile PROFILE_FGT
+!
+interface Ethernet0/0
+ description WAN
+ ip address 10.1.0.2 255.255.255.252
+ duplex auto
+!
+interface Ethernet0/1
+ description LAN site A
+ ip address 172.16.10.1 255.255.255.0
+ duplex auto
+!
+interface Ethernet0/2
+ no ip address
+ shutdown
+ duplex auto
+!
+interface Ethernet0/3
+ no ip address
+ shutdown
+ duplex auto
+
+! ============================================
+! DEFAULT ROUTE
+! ============================================
+show running-config | include ip route
+  ip route 10.0.0.2 255.255.255.255 10.1.0.1
+
+! ============================================
+! IPSEC VPN — TO FGT1 HEADQUARTERS
+! ============================================
+crypto isakmp policy 10
+ hash sha256
+ authentication pre-share
+ group 14
+crypto isakmp key VPN-SiteA-Secret123 address 10.0.0.2
+!
+!
+crypto ipsec transform-set TSET_FGT esp-des esp-sha256-hmac
+ mode tunnel
+!
+crypto ipsec profile PROFILE_FGT
+ set transform-set TSET_FGT
+
+interface Tunnel0
+ ip address 10.3.0.2 255.255.255.252
+ ip ospf network point-to-point
+ tunnel source Ethernet0/0
+ tunnel mode ipsec ipv4
+ tunnel destination 10.0.0.2
+ tunnel protection ipsec profile PROFILE_FGT
 
